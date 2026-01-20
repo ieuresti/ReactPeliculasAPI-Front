@@ -1,35 +1,65 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useEffect, useState } from 'react';
+import './App.css';
+import ListadoPeliculas from './features/peliculas/componentes/ListadoPeliculas';
+import type Pelicula from './features/peliculas/modelos/pelicula.model';
+import Menu from './componentes/Menu';
 
-function App() {
-  const [count, setCount] = useState(0)
+export default function App() {
 
-  return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+	const [peliculas, setPeliculas] = useState<AppState>({});
+
+	useEffect(() => {
+		setTimeout(() => {
+			const enCines: Pelicula[] = [
+				{
+					id: 1,
+					titulo: "Pokemon Mewtwo Strikes Back",
+					poster: "https://upload.wikimedia.org/wikipedia/en/8/80/Pokemon22Post.png"
+				},
+				{
+					id: 2,
+					titulo: "Pokemon 2000",
+					poster: "https://upload.wikimedia.org/wikipedia/en/d/dd/Pok%C3%A9mon_The_Movie_2000.jpg?20130805160059"
+				},
+				{
+					id: 3,
+					titulo: "Pokemon 3: The Movie",
+					poster: "https://upload.wikimedia.org/wikipedia/en/4/47/Pokemon-3-japanese-poster.jpg"
+				},
+			];
+
+			const proximosEstrenos: Pelicula[] = [
+				{
+					id: 4,
+					titulo: "Pokémon: Lucario and the Mystery of Mew",
+					poster: "https://upload.wikimedia.org/wikipedia/en/9/95/Pok%C3%A9mon_Lucario_film_poster.jpg"
+				},
+				{
+					id: 5,
+					titulo: "Pokémon the Movie: The Rise of Darkrai",
+					poster: "https://upload.wikimedia.org/wikipedia/en/c/c4/The_Rise_of_Darkrai_2.JPG"
+				}
+			];
+
+			setPeliculas({ enCines, proximosEstrenos });
+		}, 1000);
+	}, []);
+
+	return (
+		<>
+			<div className="container">
+				<h3>En Cines</h3>
+				<ListadoPeliculas peliculas={peliculas.enCines} />
+				<hr />
+				<h3>Proximos Estrenos</h3>
+				<ListadoPeliculas peliculas={peliculas.proximosEstrenos} />
+			</div>
+
+		</>
+	)
 }
 
-export default App
+interface AppState {
+	enCines?: Pelicula[];
+	proximosEstrenos?: Pelicula[];
+}
