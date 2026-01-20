@@ -1,1 +1,22 @@
+.app-container {
+    display: flex;
+    flex-direction: column; /* Stacks header above content-wrapper */
+    min-height: 100vh; /* Ensures the layout takes at least the full screen height */
+}
 
+.content-wrapper {
+    display: flex; /* Places sidebar and main content side-by-side */
+    flex: 1; /* Allows content-wrapper to grow and fill remaining space */
+}
+
+.sidebar {
+    width: 250px; /* Fixed width for the sidebar */
+    background-color: #f4f4f4; /* Additional styling */
+}
+
+/*
+.main-content {
+    flex: 1; // Allows main content to take up the rest of the space
+    padding: 20px; // Additional styling
+} 
+*/

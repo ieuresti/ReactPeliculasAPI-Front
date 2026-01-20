@@ -2,7 +2,8 @@ import { useEffect, useState } from 'react';
 import './App.css';
 import ListadoPeliculas from './features/peliculas/componentes/ListadoPeliculas';
 import type Pelicula from './features/peliculas/modelos/pelicula.model';
-import Menu from './componentes/Menu';
+import Sidebar from './componentes/Sidebar';
+import Header from './componentes/Header';
 
 export default function App() {
 
@@ -47,14 +48,19 @@ export default function App() {
 
 	return (
 		<>
-			<div className="container">
-				<h3>En Cines</h3>
-				<ListadoPeliculas peliculas={peliculas.enCines} />
-				<hr />
-				<h3>Proximos Estrenos</h3>
-				<ListadoPeliculas peliculas={peliculas.proximosEstrenos} />
+			<div className="app-container">
+				<Header />
+				<div className="content-wrapper">
+					<Sidebar />
+					<div className="container">
+						<h3>En Cines</h3>
+						<ListadoPeliculas peliculas={peliculas.enCines} />
+						<hr />
+						<h3>Proximos Estrenos</h3>
+						<ListadoPeliculas peliculas={peliculas.proximosEstrenos} />
+					</div>
+				</div>
 			</div>
-
 		</>
 	)
 }
