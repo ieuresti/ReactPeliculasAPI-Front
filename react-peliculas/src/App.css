@@ -1,22 +1,281 @@
-.app-container {
+/* Menu */
+.menu {
+    position: fixed;
+    width: 50px;
+    height: 50px;
+    font-size: 30px;
+    display: none; /* Oculto si no es resolucion movil */
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    cursor: pointer;
+    background-color: var(--color-boton);
+    color: var(--color-boton-texto);
+    right: 15px;
+    top: 15px;
+}
+
+/* Barra lateral */
+.barra-lateral {
+    position: fixed;
     display: flex;
-    flex-direction: column; /* Stacks header above content-wrapper */
-    min-height: 100vh; /* Ensures the layout takes at least the full screen height */
+    flex-direction: column;
+    justify-content: space-between;
+    width: 250px;
+    height: 100%;
+    overflow: hidden;
+    padding: 20px 15px;
+    background-color: var(--color-barra-lateral);
+    transition: width 0.5s ease, background-color 0.3s ease, left 0.5s ease;
 }
 
-.content-wrapper {
-    display: flex; /* Places sidebar and main content side-by-side */
-    flex: 1; /* Allows content-wrapper to grow and fill remaining space */
+.mini-barra-lateral {
+    width: 80px;
 }
 
-.sidebar {
-    width: 250px; /* Fixed width for the sidebar */
-    background-color: #f4f4f4; /* Additional styling */
+.barra-lateral span {
+    white-space: nowrap;
+    font-size: 18px;
+    text-align: left;
+    opacity: 1;
+    transition: opacity 0.5s ease, width 0.5s ease;
 }
 
-/*
-.main-content {
-    flex: 1; // Allows main content to take up the rest of the space
-    padding: 20px; // Additional styling
-} 
-*/
+.barra-lateral span.oculto {
+    opacity: 0;
+    width: 0;
+}
+
+/* Nombre de la pagina */
+.barra-lateral .nombre-pagina {
+    width: 100%;
+    height: 45px;
+    color: var(--color-texto);
+    margin-bottom: 40px;
+    display: flex;
+    align-items: center;
+}
+
+.barra-lateral .nombre-pagina i {
+    text-align: center;
+    min-width: 50px;
+    font-size: 40px;
+    cursor: pointer;
+}
+
+.barra-lateral .nombre-pagina span {
+    font-size: 25px;
+    margin-left: 5px;
+}
+
+/* Boton */
+.barra-lateral .boton {
+    width: 100%;
+    height: 45px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    border-radius: 10px;
+    background-color: var(--color-boton);
+    color: var(--color-boton-texto);
+}
+
+.barra-lateral .boton i {
+    min-width: 50px;
+    font-size: 25px;
+}
+
+/* Menu navegacion */
+.barra-lateral .navegacion {
+    height: 100%;
+    overflow-y: auto; /* Agregar efecto scroll en y en la parte de navegacion*/
+    overflow-x: hidden;
+}
+
+.barra-lateral .navegacion::-webkit-scrollbar {
+    width: 5px;
+}
+.barra-lateral .navegacion::-webkit-scrollbar-thumb {
+    background-color: var(--color-scroll);
+    border-radius: 5px;
+}
+.barra-lateral .navegacion::-webkit-scrollbar-thumb:hover {
+    background-color: var(--color-scroll-hover);
+}
+
+.barra-lateral .navegacion ul {
+    padding-left: 0;
+}
+
+.barra-lateral .navegacion li {
+    list-style: none;
+    display: flex;
+    margin-bottom: 5px;
+}
+
+.barra-lateral .navegacion a {
+    width: 100%;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    border-radius: 10px;
+    color: var(--color-texto-menu);
+}
+
+.barra-lateral .navegacion a:hover {
+    background-color: var(--color-menu-hover);
+    color: var(--color-menu-hover-texto);
+}
+
+.barra-lateral .navegacion i {
+    min-width: 50px;
+    font-size: 20px;
+    text-align: center;
+}
+
+/* Linea */
+.barra-lateral .linea {
+    width: 100%;
+    height: 1px;
+    margin-top: 15px;
+    background-color: var(--color-linea);
+}
+
+/* Modo oscuro */
+.barra-lateral .modo-oscuro {
+    width: 100%;
+    border-radius: 10px;
+    margin-bottom: 80px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.barra-lateral .modo-oscuro .info {
+    width: 150px;
+    height: 45px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    color: var(--color-texto-menu);
+}
+
+.barra-lateral .modo-oscuro i {
+    width: 50px;
+    font-size: 20px;
+    text-align: center;
+}
+
+/* Switch */
+.barra-lateral .modo-oscuro .switch {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 50px;
+    height: 45px;
+    cursor: pointer;
+}
+
+.barra-lateral .modo-oscuro .base {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 35px;
+    height: 20px;
+    background-color: var(--color-switch-base);
+    border-radius: 50px;
+}
+
+.barra-lateral .modo-oscuro .circulo {
+    position: absolute;
+    width: 18px;
+    height: 90%;
+    background-color: var(--color-switch-circulo);
+    border-radius: 50%;
+    left: 2px;
+    transition: left 0.3s ease;
+}
+
+.barra-lateral .modo-oscuro .circulo.encendido {
+    left: 15px;
+}
+
+/* Usuario */
+.barra-lateral .usuario {
+    width: 100%;
+    display: flex;
+}
+
+.barra-lateral .usuario i {
+    width: 50px;
+    min-width: 50px;
+    font-size: 20px;
+    text-align: center;
+    color: var(--color-texto-menu);
+}
+
+.barra-lateral .usuario .info-usuario {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: var(--color-texto);
+    overflow: hidden;
+}
+
+.barra-lateral .usuario .nombre-email {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    margin-left: 5px;
+}
+
+.barra-lateral .usuario .nombre {
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.barra-lateral .usuario .email {
+    font-size: 13px;
+}
+
+/* Main */
+main {
+    margin-left: 250px;
+    padding: 20px;
+    transition: margin-left 0.5s ease;
+}
+main.min-main {
+    margin-left: 80px;
+}
+
+/* Responsive */
+@media (max-height: 660px) {
+    .barra-lateral .nombre-pagina {
+        margin-bottom: 5px;
+    }
+    .barra-lateral .modo-oscuro {
+        margin-bottom: 3px;
+    }
+}
+
+@media (max-width: 600px) {
+    .barra-lateral {
+        position: fixed;
+        left: -250px;
+    }
+    .max-barra-lateral {
+        left: 0;
+    }
+    .menu {
+        display: flex;
+    }
+    main {
+        margin-left: 0;
+    }
+    main.min-main {
+    margin-left: 0;
+}
+}

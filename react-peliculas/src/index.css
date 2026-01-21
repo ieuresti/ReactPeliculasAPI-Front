@@ -1,0 +1,55 @@
+/* Estilos que afectan a toda la aplicacion */
+:root {
+    --color-barra-lateral: rgb(255, 255, 255);
+
+    --color-texto: rgb(0, 0, 0);
+    --color-texto-menu: rgb(134, 136, 144);
+
+    --color-menu-hover: rgb(238, 238, 238);
+    --color-menu-hover-texto: rgb(0, 0, 0);
+
+    --color-boton: rgb(0, 0, 0);
+    --color-boton-texto: rgb(255, 255, 255);
+
+    --color-linea: rgb(180, 180, 180);
+
+    --color-switch-base: rgb(201, 202, 206);
+    --color-switch-circulo: rgb(241, 241, 241);
+
+    --color-scroll: rgb(192, 192, 192);
+    --color-scroll-hover: rgb(134, 134, 134);
+}
+
+.dark-mode {
+    --color-barra-lateral: rgb(44, 45, 49);
+
+    --color-texto: rgb(255, 255, 255);
+    --color-texto-menu: rgb(110, 110, 117);
+
+    --color-menu-hover: rgb(0, 0, 0);
+    --color-menu-hover-texto: rgb(238, 238, 238);
+
+    --color-boton: rgb(255, 255, 255);
+    --color-boton-texto: rgb(0, 0, 0);
+
+    --color-linea: rgb(90, 90, 90);
+
+    --color-switch-base: rgb(39, 205, 64);
+    --color-switch-circulo: rgb(255, 255, 255);
+
+    --color-scroll: rgb(68, 69, 74);
+    --color-scroll-hover: rgb(85, 85, 85);
+}
+
+/* Selector universal */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    height: 100vh;
+    width: 100%;
+    background-color: darkcyan !important;
+}
