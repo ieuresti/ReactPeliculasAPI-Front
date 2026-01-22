@@ -9,7 +9,6 @@ import EditarActor from './features/actores/componentes/EditarActor';
 import IndiceCines from './features/cines/componentes/IndiceCines';
 import CrearCine from './features/cines/componentes/CrearCine';
 import EditarCine from './features/cines/componentes/EditarCine';
-import ListadoPeliculas from './features/peliculas/componentes/ListadoPeliculas';
 import CrearPelicula from './features/peliculas/componentes/CrearPelicula';
 import EditarPelicula from './features/peliculas/componentes/EditarPelicula';
 import RutaNoEncontrada from './componentes/RutaNoEncontrada';
