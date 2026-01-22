@@ -1,3 +1,5 @@
+import { NavLink } from "react-router";
+
 export default function Sidebar() {
     return (
         <div className="barra-lateral">
@@ -14,40 +16,46 @@ export default function Sidebar() {
                         });
                         main?.classList.toggle("min-main");
                     }} />
-                    <span>Peliculas App</span>
+                    <span>React Películas</span>
                 </div>
 
                 <button className="boton">
                     <i className="bi bi-plus"></i>
-                    <span>Create new</span>
+                    <span>Login</span>
                 </button>
             </div>
 
             <nav className="navegacion">
                 <ul>
                     <li>
-                        <a href="#">
-                            <i className="bi bi-envelope"></i>
-                            <span>Inbox</span>
-                        </a>
+                        <NavLink to="/">
+                            <i className="bi bi-house"></i>
+                            <span>Home</span>
+                        </NavLink>
                     </li>
                     <li>
-                        <a href="#">
+                        <NavLink to="/generos">
+                            <i className="bi bi-tag"></i>
+                            <span>Géneros</span>
+                        </NavLink>
+                    </li>
+                    <li>
+                        <NavLink to="/actores">
                             <i className="bi bi-star"></i>
-                            <span>Starred</span>
-                        </a>
+                            <span>Actores</span>
+                        </NavLink>
                     </li>
                     <li>
-                        <a href="#">
-                            <i className="bi bi-send"></i>
-                            <span>Sent</span>
-                        </a>
+                        <NavLink to="/cines">
+                            <i className="bi bi-building"></i>
+                            <span>Cines</span>
+                        </NavLink>
                     </li>
                     <li>
-                        <a href="#">
-                            <i className="bi bi-trash"></i>
-                            <span>Trash</span>
-                        </a>
+                        <NavLink to="/peliculas/crear">
+                            <i className="bi bi-film"></i>
+                            <span>Crear Película</span>
+                        </NavLink>
                     </li>
                 </ul>
             </nav>
