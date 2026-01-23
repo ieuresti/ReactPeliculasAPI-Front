@@ -52,6 +52,12 @@ export default function Sidebar() {
                         </NavLink>
                     </li>
                     <li>
+                        <NavLink to="/peliculas/filtrar">
+                            <i className="bi bi-camera-reels"></i>
+                            <span>Filtrar Películas</span>
+                        </NavLink>
+                    </li>
+                    <li>
                         <NavLink to="/peliculas/crear">
                             <i className="bi bi-film"></i>
                             <span>Crear Película</span>

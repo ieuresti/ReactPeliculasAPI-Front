@@ -53,3 +53,7 @@ body {
     width: 100%;
     background-color: darkcyan !important;
 }
+
+.error {
+    color: red;
+}
