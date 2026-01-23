@@ -24,8 +24,8 @@ export default function FormularioGenero(props: FormularioGeneroProps) {
             <div className="mb-3">
                 <label className="form-label"></label>
                 <div className="input-group">
-                    <span className="input-group-text"><i className="bi bi-tag-fill"></i></span>
-                    <input className="form-control" placeholder="Ingresa el nombre del género" {...register('nombre')} autoComplete="off" />
+                    <span className="input-group-text"><i className="bi bi-pencil"></i></span>
+                    <input type="text" className="form-control" placeholder="Ingresa el nombre del género" {...register('nombre')} autoComplete="off" />
                 </div>
                 {errors.nombre && <p className='error'>{errors.nombre.message}</p>}
             </div>
@@ -45,7 +45,7 @@ export default function FormularioGenero(props: FormularioGeneroProps) {
 
 interface FormularioGeneroProps {
     modelo?: GeneroCreacion;
-    onSubmit: SubmitHandler<GeneroCreacion>
+    onSubmit: SubmitHandler<GeneroCreacion>;
 }
 
 const reglasDeValidacion = yup.object({
