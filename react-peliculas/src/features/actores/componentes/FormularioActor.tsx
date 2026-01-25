@@ -5,6 +5,7 @@ import { fechaNoPuedeSerFutura, primeraLetraMayuscula } from '../../../validacio
 import { yupResolver } from '@hookform/resolvers/yup';
 import { NavLink } from 'react-router';
 import Boton from '../../../componentes/Boton';
+import SeleccionarImagen from '../../../componentes/SeleccionarImagen';
 
 export default function FormularioActor(props: FormularioActorProps) {
 
@@ -12,12 +13,15 @@ export default function FormularioActor(props: FormularioActorProps) {
     const {
         register, // registra campos del formulario
         handleSubmit, // maneja el envío del formulario
+        setValue, // establece o actualiza valores en los campos del formulario
         formState: { errors, isValid, isSubmitting } // contiene estado del formulario (errores, validación, envío)
     } = useForm<ActorCreacion>({
         resolver: yupResolver(reglasDeValidacion), // Resolver de yup para validaciones del formulario
         mode: 'onChange', // Modo 'onChange': valida en cada cambio del input
         defaultValues: props.modelo ? props.modelo : { nombre: '', fechaNacimiento: '' } // establecer los valores iniciales de los campos del formulario
     });
+
+    const imagenActualURL: string | undefined = props.modelo?.foto ? props.modelo?.foto as string : undefined;
 
     return (
         <form onSubmit={handleSubmit(props.onSubmit)}>
@@ -37,6 +41,10 @@ export default function FormularioActor(props: FormularioActorProps) {
                     <input type="date" className="form-control" placeholder="Ingresa la fecha de nacimiento" {...register('fechaNacimiento')} autoComplete="off" />
                 </div>
                 {errors.fechaNacimiento && <p className='error'>{errors.fechaNacimiento.message}</p>}
+            </div>
+
+            <div className="mb-3">
+                <SeleccionarImagen label="Selecciona una imagen" imagenURL={imagenActualURL} imagenSeleccionada={foto => setValue('foto', foto)} />
             </div>
 
             <div className="d-flex justify-content-between">

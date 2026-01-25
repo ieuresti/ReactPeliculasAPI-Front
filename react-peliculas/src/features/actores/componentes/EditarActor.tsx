@@ -13,7 +13,7 @@ export default function EditarActor() {
 
     useEffect(() => {
         const timerId = setTimeout(() => {
-            setModelo({ nombre: 'Keanu Reeves ' + id, fechaNacimiento: '1980-01-22' });
+            setModelo({ nombre: 'Keanu Reeves ' + id, fechaNacimiento: '1980-01-22', foto: 'https://upload.wikimedia.org/wikipedia/commons/2/25/Tom_Holland_MTV_2018_%2801%29.jpg' });
 
             return () => clearTimeout(timerId);
         }, 1000);
