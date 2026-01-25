@@ -13,7 +13,7 @@ export default function EditarCine() {
 
     useEffect(() => {
         const timerId = setTimeout(() => {
-            setModelo({ nombre: 'Cinepolis ' + id });
+            setModelo({ nombre: 'MM Cinemas ' + id, latitud: 25.67054461425075, longitud: -100.31110927115098 });
 
             return () => clearTimeout(timerId);
         }, 1000);
