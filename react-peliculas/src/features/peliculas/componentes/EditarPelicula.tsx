@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import Cargando from '../../../componentes/Cargando';
 import type Genero from '../../generos/modelos/Genero.model';
+import type Cine from '../../cines/modelos/Cine.model';
 
 export default function EditarPelicula() {
 
@@ -33,6 +34,14 @@ export default function EditarPelicula() {
     ];
     const generosNoSeleccionados: Genero[] = [{ id: 3, nombre: 'Drama' }];
 
+    const cinesSeleccionados: Cine[] = [
+        { id: 2, nombre: 'Cinepolis', latitud: 25.66806344098432, longitud: -100.31528212923988 },
+        { id: 3, nombre: 'Cine Citadel', latitud: 25.725976521693454, longitud: -100.21665865945626 }
+    ];
+    const cinesNoSeleccionados: Cine[] = [
+        { id: 1, nombre: 'Cinema Raly', latitud: 25.683940782799, longitud: -100.28553079999999 }
+    ];
+
     return (
         <div className="container mt-5">
             <div className="card shadow-lg">
@@ -46,7 +55,9 @@ export default function EditarPelicula() {
                         <FormularioPelicula
                             onSubmit={onSubmit} modelo={modelo}
                             generosSeleccionados={generosSeleccionados}
-                            generosNoSeleccionados={generosNoSeleccionados} />
+                            generosNoSeleccionados={generosNoSeleccionados}
+                            cinesSeleccionados={cinesSeleccionados}
+                            cinesNoSeleccionados={cinesNoSeleccionados} />
                         : <Cargando />
                     }
                 </div>

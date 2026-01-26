@@ -4,4 +4,5 @@ export default interface PeliculaCreacion {
     trailer?: string;
     poster?: File | string;
     generosIds?: number[];
+    cinesIds?: number[];
 }

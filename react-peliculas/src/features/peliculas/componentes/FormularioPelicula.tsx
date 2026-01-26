@@ -10,6 +10,7 @@ import SelectorMultiple from '../../../componentes/SelectorMultiple/SelectorMult
 import type Genero from '../../generos/modelos/Genero.model';
 import type SelectorMultipleModel from '../../../componentes/SelectorMultiple/SelectorMultiple.model';
 import { useState } from 'react';
+import type Cine from '../../cines/modelos/Cine.model';
 
 export default function FormularioPelicula(props: FormularioPeliculaProps) {
 
@@ -41,12 +42,16 @@ export default function FormularioPelicula(props: FormularioPeliculaProps) {
     const [generosSeleccionados, setGenerosSeleccionados] = useState(mapear(props.generosSeleccionados));
     const [generosNoSeleccionados, setGenerosNoSeleccionados] = useState(mapear(props.generosNoSeleccionados));
 
+    const [cinesSeleccionados, setCinesSeleccionados] = useState(mapear(props.cinesSeleccionados));
+    const [cinesNoSeleccionados, setCinesNoSeleccionados] = useState(mapear(props.cinesNoSeleccionados));
+
     // Función que maneja el envío del formulario de película
     // Recibe los datos validados del formulario y los prepara antes de enviarlos al componente padre
     const onSubmit: SubmitHandler<PeliculaCreacion> = (data) => {
-        // Agregamos los IDs de los géneros seleccionados al objeto de datos
-        // Extraemos las 'llave' (que son los IDs) de los géneros seleccionados en el SelectorMultiple
+        // Agregamos los IDs seleccionados al objeto de datos
+        // Extraemos las 'llave' (que son los IDs) seleccionados en el SelectorMultiple
         data.generosIds = generosSeleccionados.map(genero => genero.llave);
+        data.cinesIds = cinesSeleccionados.map(cine => cine.llave);
         // Llamamos a la función onSubmit pasada por props para enviar los datos completos al componente padre
         props.onSubmit(data);
     };
@@ -94,6 +99,16 @@ export default function FormularioPelicula(props: FormularioPeliculaProps) {
                 />
             </div>
 
+            <div className="mb-3">
+                <label className="form-label">Cines:</label>
+                <SelectorMultiple seleccionados={cinesSeleccionados} noSeleccionados={cinesNoSeleccionados}
+                    onChange={(seleccionados, noSeleccionados) => {
+                        setCinesSeleccionados(seleccionados);
+                        setCinesNoSeleccionados(noSeleccionados);
+                    }}
+                />
+            </div>
+
             <div className="d-flex justify-content-between">
                 <NavLink to="/" className="btn btn-secondary">
                     <i className="bi bi-arrow-counterclockwise"></i> Regresar
@@ -112,6 +127,8 @@ interface FormularioPeliculaProps {
     onSubmit: SubmitHandler<PeliculaCreacion>;
     generosSeleccionados: Genero[];
     generosNoSeleccionados: Genero[];
+    cinesSeleccionados: Cine[];
+    cinesNoSeleccionados: Cine[];
 }
 
 const reglasDeValidacion = yup.object({

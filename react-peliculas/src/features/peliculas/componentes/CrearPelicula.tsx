@@ -2,6 +2,7 @@ import type { SubmitHandler } from 'react-hook-form';
 import FormularioPelicula from './FormularioPelicula';
 import type PeliculaCreacion from '../modelos/PeliculaCreacion.model';
 import type Genero from '../../generos/modelos/Genero.model';
+import type Cine from '../../cines/modelos/Cine.model';
 
 export default function CrearPelicula() {
 
@@ -18,6 +19,13 @@ export default function CrearPelicula() {
         { id: 1, nombre: 'Acción' }, { id: 2, nombre: 'Terror' }, { id: 3, nombre: 'Drama' }
     ];
 
+    const cinesSeleccionados: Cine[] = [];
+    const cinesNoSeleccionados: Cine[] = [
+        { id: 1, nombre: 'Cinema Raly', latitud: 25.683940782799, longitud: -100.28553079999999 },
+        { id: 2, nombre: 'Cinepolis', latitud: 25.66806344098432, longitud: -100.31528212923988 },
+        { id: 3, nombre: 'Cine Citadel', latitud: 25.725976521693454, longitud: -100.21665865945626 }
+    ];
+
     return (
         <div className="container mt-5">
             <div className="card shadow-lg">
@@ -31,6 +39,8 @@ export default function CrearPelicula() {
                         onSubmit={onSubmit}
                         generosSeleccionados={generosSeleccionados}
                         generosNoSeleccionados={generosNoSeleccionados}
+                        cinesSeleccionados={cinesSeleccionados}
+                        cinesNoSeleccionados={cinesNoSeleccionados}
                     />
                 </div>
 
