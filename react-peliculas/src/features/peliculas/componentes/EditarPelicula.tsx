@@ -4,6 +4,7 @@ import type PeliculaCreacion from '../modelos/PeliculaCreacion.model';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import Cargando from '../../../componentes/Cargando';
+import type Genero from '../../generos/modelos/Genero.model';
 
 export default function EditarPelicula() {
 
@@ -27,6 +28,11 @@ export default function EditarPelicula() {
         console.log(data);
     }
 
+    const generosSeleccionados: Genero[] = [
+        { id: 1, nombre: 'Acción' }, { id: 2, nombre: 'Terror' }
+    ];
+    const generosNoSeleccionados: Genero[] = [{ id: 3, nombre: 'Drama' }];
+
     return (
         <div className="container mt-5">
             <div className="card shadow-lg">
@@ -36,7 +42,13 @@ export default function EditarPelicula() {
                 </div>
 
                 <div className="card-body">
-                    {modelo ? <FormularioPelicula onSubmit={onSubmit} modelo={modelo} /> : <Cargando />}
+                    {modelo ?
+                        <FormularioPelicula
+                            onSubmit={onSubmit} modelo={modelo}
+                            generosSeleccionados={generosSeleccionados}
+                            generosNoSeleccionados={generosNoSeleccionados} />
+                        : <Cargando />
+                    }
                 </div>
 
             </div>

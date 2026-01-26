@@ -1,0 +1,46 @@
+.div {
+    display: flex;
+    text-align: center;
+}
+
+.div ul {
+    height: 200px;
+    overflow-y: auto;
+    list-style-type: none;
+    width: 170px;
+    padding: 0;
+    border-radius: 3px;
+    border: 1px solid #ccc;
+}
+
+.div ul li {
+    cursor: pointer;
+    border-bottom: 1px solid #ccc;
+    padding: 2px 10px;
+    font-size: 14px;
+}
+
+.div ul li:hover {
+    background-color: #0d6efd;
+    color: white;
+}
+
+.botones {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 5px;
+}
+
+.botones button {
+    margin: 5px;
+}
+
+/* Responsive */
+@media (max-width: 767px) {
+    .div {
+        display: block;
+        justify-items: center;
+        text-align: center;
+    }
+}

@@ -6,6 +6,10 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { NavLink } from 'react-router';
 import Boton from '../../../componentes/Boton';
 import SeleccionarImagen from '../../../componentes/SeleccionarImagen';
+import SelectorMultiple from '../../../componentes/SelectorMultiple/SelectorMultiple';
+import type Genero from '../../generos/modelos/Genero.model';
+import type SelectorMultipleModel from '../../../componentes/SelectorMultiple/SelectorMultiple.model';
+import { useState } from 'react';
 
 export default function FormularioPelicula(props: FormularioPeliculaProps) {
 
@@ -23,8 +27,32 @@ export default function FormularioPelicula(props: FormularioPeliculaProps) {
 
     const imagenActualURL: string | undefined = props.modelo?.poster ? props.modelo?.poster as string : undefined;
 
+    // Función que mapea un arreglo de objetos con id y nombre a SelectorMultipleModel
+    // SelectorMultipleModel requiere propiedades 'llave' y 'descripcion', por lo que transformamos id -> llave y nombre -> descripcion
+    const mapear = (arreglo: { id: number, nombre: string }[]): SelectorMultipleModel[] => {
+        // Usamos el método map de arrays para transformar cada elemento del arreglo
+        return arreglo.map(({ id, nombre }) => ({
+            // Extraemos id y nombre del objeto actual usando destructuring y creamos un nuevo objeto con las propiedades requeridas
+            llave: id, // El id se asigna a 'llave'
+            descripcion: nombre // El nombre se asigna a 'descripcion'
+        }));
+    };
+
+    const [generosSeleccionados, setGenerosSeleccionados] = useState(mapear(props.generosSeleccionados));
+    const [generosNoSeleccionados, setGenerosNoSeleccionados] = useState(mapear(props.generosNoSeleccionados));
+
+    // Función que maneja el envío del formulario de película
+    // Recibe los datos validados del formulario y los prepara antes de enviarlos al componente padre
+    const onSubmit: SubmitHandler<PeliculaCreacion> = (data) => {
+        // Agregamos los IDs de los géneros seleccionados al objeto de datos
+        // Extraemos las 'llave' (que son los IDs) de los géneros seleccionados en el SelectorMultiple
+        data.generosIds = generosSeleccionados.map(genero => genero.llave);
+        // Llamamos a la función onSubmit pasada por props para enviar los datos completos al componente padre
+        props.onSubmit(data);
+    };
+
     return (
-        <form onSubmit={handleSubmit(props.onSubmit)}>
+        <form onSubmit={handleSubmit(onSubmit)}>
             <div className="mb-3">
                 <label className="form-label"></label>
                 <div className="input-group">
@@ -56,6 +84,16 @@ export default function FormularioPelicula(props: FormularioPeliculaProps) {
                 <SeleccionarImagen label="Selecciona una imagen" imagenURL={imagenActualURL} imagenSeleccionada={poster => setValue('poster', poster)} />
             </div>
 
+            <div className="mb-3">
+                <label className="form-label">Géneros:</label>
+                <SelectorMultiple seleccionados={generosSeleccionados} noSeleccionados={generosNoSeleccionados}
+                    onChange={(seleccionados, noSeleccionados) => {
+                        setGenerosSeleccionados(seleccionados);
+                        setGenerosNoSeleccionados(noSeleccionados);
+                    }}
+                />
+            </div>
+
             <div className="d-flex justify-content-between">
                 <NavLink to="/" className="btn btn-secondary">
                     <i className="bi bi-arrow-counterclockwise"></i> Regresar
@@ -72,6 +110,8 @@ export default function FormularioPelicula(props: FormularioPeliculaProps) {
 interface FormularioPeliculaProps {
     modelo?: PeliculaCreacion;
     onSubmit: SubmitHandler<PeliculaCreacion>;
+    generosSeleccionados: Genero[];
+    generosNoSeleccionados: Genero[];
 }
 
 const reglasDeValidacion = yup.object({

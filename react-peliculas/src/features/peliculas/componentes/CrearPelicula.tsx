@@ -1,6 +1,7 @@
 import type { SubmitHandler } from 'react-hook-form';
 import FormularioPelicula from './FormularioPelicula';
 import type PeliculaCreacion from '../modelos/PeliculaCreacion.model';
+import type Genero from '../../generos/modelos/Genero.model';
 
 export default function CrearPelicula() {
 
@@ -12,6 +13,11 @@ export default function CrearPelicula() {
         console.log(data);
     }
 
+    const generosSeleccionados: Genero[] = [];
+    const generosNoSeleccionados: Genero[] = [
+        { id: 1, nombre: 'Acción' }, { id: 2, nombre: 'Terror' }, { id: 3, nombre: 'Drama' }
+    ];
+
     return (
         <div className="container mt-5">
             <div className="card shadow-lg">
@@ -21,7 +27,11 @@ export default function CrearPelicula() {
                 </div>
 
                 <div className="card-body">
-                    <FormularioPelicula onSubmit={onSubmit} />
+                    <FormularioPelicula
+                        onSubmit={onSubmit}
+                        generosSeleccionados={generosSeleccionados}
+                        generosNoSeleccionados={generosNoSeleccionados}
+                    />
                 </div>
 
             </div>
