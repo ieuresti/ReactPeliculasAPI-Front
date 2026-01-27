@@ -11,6 +11,8 @@ import type Genero from '../../generos/modelos/Genero.model';
 import type SelectorMultipleModel from '../../../componentes/SelectorMultiple/SelectorMultiple.model';
 import { useState } from 'react';
 import type Cine from '../../cines/modelos/Cine.model';
+import TypeaheadActores from './TypeaheadActores';
+import type ActorPelicula from '../modelos/ActorPelicula.model';
 
 export default function FormularioPelicula(props: FormularioPeliculaProps) {
 
@@ -45,6 +47,8 @@ export default function FormularioPelicula(props: FormularioPeliculaProps) {
     const [cinesSeleccionados, setCinesSeleccionados] = useState(mapear(props.cinesSeleccionados));
     const [cinesNoSeleccionados, setCinesNoSeleccionados] = useState(mapear(props.cinesNoSeleccionados));
 
+    const [actoresSeleccionados, setActoresSeleccionados] = useState(props.actoresSeleccionados);
+
     // Función que maneja el envío del formulario de película
     // Recibe los datos validados del formulario y los prepara antes de enviarlos al componente padre
     const onSubmit: SubmitHandler<PeliculaCreacion> = (data) => {
@@ -52,6 +56,7 @@ export default function FormularioPelicula(props: FormularioPeliculaProps) {
         // Extraemos las 'llave' (que son los IDs) seleccionados en el SelectorMultiple
         data.generosIds = generosSeleccionados.map(genero => genero.llave);
         data.cinesIds = cinesSeleccionados.map(cine => cine.llave);
+        data.actores = actoresSeleccionados;
         // Llamamos a la función onSubmit pasada por props para enviar los datos completos al componente padre
         props.onSubmit(data);
     };
@@ -109,6 +114,23 @@ export default function FormularioPelicula(props: FormularioPeliculaProps) {
                 />
             </div>
 
+            <div className="mb-3">
+                <TypeaheadActores actores={actoresSeleccionados}
+                    onAdd={actores => {
+                        setActoresSeleccionados(actores)
+                    }}
+                    onRemove={actor => {
+                        const actores = actoresSeleccionados.filter(x => x !== actor);
+                        setActoresSeleccionados(actores);
+                    }}
+                    onCambioPersonaje={(id, personaje) => {
+                        const indice = actoresSeleccionados.findIndex(x => x.id === id);
+                        const actores = [...actoresSeleccionados];
+                        actores[indice].personaje = personaje;
+                        setActoresSeleccionados(actores);
+                    }} />
+            </div>
+
             <div className="d-flex justify-content-between">
                 <NavLink to="/" className="btn btn-secondary">
                     <i className="bi bi-arrow-counterclockwise"></i> Regresar
@@ -129,6 +151,7 @@ interface FormularioPeliculaProps {
     generosNoSeleccionados: Genero[];
     cinesSeleccionados: Cine[];
     cinesNoSeleccionados: Cine[];
+    actoresSeleccionados: ActorPelicula[];
 }
 
 const reglasDeValidacion = yup.object({

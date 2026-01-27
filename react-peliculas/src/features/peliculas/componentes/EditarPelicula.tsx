@@ -6,6 +6,7 @@ import { useParams } from 'react-router';
 import Cargando from '../../../componentes/Cargando';
 import type Genero from '../../generos/modelos/Genero.model';
 import type Cine from '../../cines/modelos/Cine.model';
+import type ActorPelicula from '../modelos/ActorPelicula.model';
 
 export default function EditarPelicula() {
 
@@ -41,6 +42,9 @@ export default function EditarPelicula() {
     const cinesNoSeleccionados: Cine[] = [
         { id: 1, nombre: 'Cinema Raly', latitud: 25.683940782799, longitud: -100.28553079999999 }
     ];
+    const actoresSeleccionados: ActorPelicula[] = [
+        { id: 1, nombre: 'Tom Holland', personaje: 'Spiderman', foto: 'https://upload.wikimedia.org/wikipedia/commons/2/25/Tom_Holland_MTV_2018_%2801%29.jpg' }
+    ];
 
     return (
         <div className="container mt-5">
@@ -57,7 +61,8 @@ export default function EditarPelicula() {
                             generosSeleccionados={generosSeleccionados}
                             generosNoSeleccionados={generosNoSeleccionados}
                             cinesSeleccionados={cinesSeleccionados}
-                            cinesNoSeleccionados={cinesNoSeleccionados} />
+                            cinesNoSeleccionados={cinesNoSeleccionados}
+                            actoresSeleccionados={actoresSeleccionados} />
                         : <Cargando />
                     }
                 </div>

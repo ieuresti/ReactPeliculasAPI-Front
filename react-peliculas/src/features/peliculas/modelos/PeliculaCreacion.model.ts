@@ -1,3 +1,5 @@
+import type ActorPelicula from './ActorPelicula.model';
+
 export default interface PeliculaCreacion {
     titulo: string;
     fechaLanzamiento: string;
@@ -5,4 +7,5 @@ export default interface PeliculaCreacion {
     poster?: File | string;
     generosIds?: number[];
     cinesIds?: number[];
+    actores?: ActorPelicula[];
 }
