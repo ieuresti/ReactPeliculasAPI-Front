@@ -1,29 +1,18 @@
 import { useNavigate } from 'react-router';
 import Boton from '../../../componentes/Boton';
-import { useEffect, useState } from 'react';
-import clienteAPI from '../../../api/clienteAxios';
-import type Genero from '../modelos/Genero.model';
 import ListadoGenerico from '../../../componentes/ListadoGenerico';
 import Paginacion from '../../../componentes/Paginacion';
+import Cargando from '../../../componentes/Cargando';
+import { useGeneros } from '../hooks/useGeneros';
 
 export default function IndiceGeneros() {
 
     const navigate = useNavigate();
 
-    const [generos, setGeneros] = useState<Genero[]>();
-    const [cantidadTotalRegistros, setCantidadTotalRegistros] = useState(0);
-    const [pagina, setPagina] = useState(1);
-    const [recordsPorPagina, setRecordsPorPagina] = useState(5);
-
-    useEffect(() => {
-        clienteAPI.get<Genero[]>('/generos', {
-            params: { pagina, recordsPorPagina }
-        }).then(resp => {
-            const cantidadTotalRegistros = parseInt(resp.headers['cantidad-total-registros']);
-            setCantidadTotalRegistros(cantidadTotalRegistros);
-            setGeneros(resp.data)
-        });
-    }, [pagina, recordsPorPagina]);
+    const {
+        generos, cantidadTotalRegistros,
+        pagina, setPagina, recordsPorPagina, setRecordsPorPagina, cargando
+    } = useGeneros(); // Hook personalizado
 
     return (
         <>
@@ -32,7 +21,7 @@ export default function IndiceGeneros() {
                 <Boton onClick={() => navigate('/generos/crear')}>Crear Género</Boton>
             </div>
 
-            <div className="mb-4">
+            {cargando ? <Cargando /> : <div className="mb-4">
                 <div className="mb-2">
                     <Paginacion
                         paginaActual={pagina}
@@ -69,7 +58,7 @@ export default function IndiceGeneros() {
                         </tbody>
                     </table>
                 </ListadoGenerico>
-            </div>
+            </div>}
 
         </>
     )
