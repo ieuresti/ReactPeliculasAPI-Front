@@ -4,6 +4,8 @@ import ListadoGenerico from '../../../componentes/ListadoGenerico';
 import Paginacion from '../../../componentes/Paginacion';
 import Cargando from '../../../componentes/Cargando';
 import { useGeneros } from '../hooks/useGeneros';
+import Confirmar from '../../../utils/Confirmar';
+import clienteAPI from '../../../api/clienteAxios';
 
 export default function IndiceGeneros() {
 
@@ -11,8 +13,22 @@ export default function IndiceGeneros() {
 
     const {
         generos, cantidadTotalRegistros,
-        pagina, setPagina, recordsPorPagina, setRecordsPorPagina, cargando
+        pagina, setPagina, recordsPorPagina, setRecordsPorPagina, cargando, cargarRegistros
     } = useGeneros(); // Hook personalizado
+
+    const Borrar = async (id: number) => {
+        try {
+            await clienteAPI.delete(`/generos/${id}`);
+
+            if (pagina === 1) {
+                cargarRegistros();
+            } else {
+                setPagina(1);
+            }
+        } catch (error) {
+            console.error(error)
+        }
+    }
 
     return (
         <>
@@ -50,7 +66,12 @@ export default function IndiceGeneros() {
                                             onClick={() => navigate(`/generos/editar/${genero.id}`)}>
                                             <i className="bi bi-pencil me-1"></i>Editar
                                         </Boton>
-                                        <Boton btnClassName="btn btn-sm btn-outline-danger">
+                                        <Boton btnClassName="btn btn-sm btn-outline-danger"
+                                            onClick={() => Confirmar(
+                                                '¿Desea borrar el registro?', '',
+                                                'question', true, 'Borrar', () => {
+                                                    Borrar(genero.id);
+                                                })}>
                                             <i className="bi bi-trash me-1"></i>Borrar
                                         </Boton>
                                     </td>
@@ -58,8 +79,7 @@ export default function IndiceGeneros() {
                         </tbody>
                     </table>
                 </ListadoGenerico>
-            </div>}
-
+            </div >}
         </>
     )
 }
