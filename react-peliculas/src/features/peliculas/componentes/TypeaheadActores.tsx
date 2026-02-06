@@ -1,25 +1,35 @@
-import { Typeahead } from 'react-bootstrap-typeahead';
+import { AsyncTypeahead } from 'react-bootstrap-typeahead';
 import type { Option } from 'react-bootstrap-typeahead/types/types';
 import type ActorPelicula from '../modelos/ActorPelicula.model';
+import { useState } from 'react';
+import clienteAPI from '../../../api/clienteAxios';
 
 export default function TypeaheadActores(props: TypeaheadActoresProps) {
 
-    const actores: ActorPelicula[] = [
-        { id: 1, nombre: 'Tom Holland', personaje: '', foto: 'https://upload.wikimedia.org/wikipedia/commons/2/25/Tom_Holland_MTV_2018_%2801%29.jpg' },
-        { id: 2, nombre: 'Marisa Tomai', personaje: '', foto: 'https://upload.wikimedia.org/wikipedia/commons/2/25/Tom_Holland_MTV_2018_%2801%29.jpg' },
-        { id: 3, nombre: 'Tom Hanks', personaje: '', foto: 'https://upload.wikimedia.org/wikipedia/commons/2/25/Tom_Holland_MTV_2018_%2801%29.jpg' }
-    ];
+    const [actores, setActores] = useState<ActorPelicula[]>([]);
+    const [cargando, setCargando] = useState(false);
 
     const seleccion: ActorPelicula[] = [];
+
+    function manejarBusqueda(texto: string) {
+        setCargando(true);
+        clienteAPI.get<ActorPelicula[]>(`/actores/${texto}`).then(resp => {
+            setActores(resp.data);
+            setCargando(false);
+        });
+    }
 
     return (
         <>
             <label className="form-label">Actores</label>
-            <Typeahead
+            <AsyncTypeahead
+                isLoading={cargando}
+                onSearch={manejarBusqueda}
                 id="typeahead"
                 onChange={(actores: Option[]) => {
                     const actorSeleccionado = actores[0] as ActorPelicula;
                     if (props.actores.findIndex(x => x.id === actorSeleccionado.id) === -1) {
+                        actorSeleccionado.personaje = '';
                         props.onAdd([...props.actores, actorSeleccionado]);
                     }
                 }}

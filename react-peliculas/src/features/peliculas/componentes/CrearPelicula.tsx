@@ -3,49 +3,77 @@ import FormularioPelicula from './FormularioPelicula';
 import type PeliculaCreacion from '../modelos/PeliculaCreacion.model';
 import type Genero from '../../generos/modelos/Genero.model';
 import type Cine from '../../cines/modelos/Cine.model';
+import { useEffect, useState } from 'react';
+import clienteAPI from '../../../api/clienteAxios';
+import type PeliculaPostGet from '../modelos/PeliculaPostGet';
+import Cargando from '../../../componentes/Cargando';
+import ConvertirPeliculaCreacionAFormData from '../utilidades/ConvertirPeliculaCreacionAFormData';
+import type Pelicula from '../modelos/pelicula.model';
+import { useNavigate } from 'react-router';
+import ExtraerErrores from '../../../utils/ExtraerErrores';
+import { toast, ToastContainer } from 'react-toastify';
 
 export default function CrearPelicula() {
+
+    const [generosNoSeleccionados, setGenerosNoSeleccionados] = useState<Genero[]>([]);
+    const [cinesNoSeleccionados, setCinesNoSeleccionados] = useState<Cine[]>([]);
+    const [cargando, setCargando] = useState(true);
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        clienteAPI.get<PeliculaPostGet>('/peliculas/PostGet').then(resp => {
+            setGenerosNoSeleccionados(resp.data.generos);
+            setCinesNoSeleccionados(resp.data.cines);
+            setCargando(false);
+        });
+    }, []);
 
     // Función que se ejecuta al enviar el formulario
     // SubmitHandler<PeliculaCreacion>: tipo para el handler de envío
     const onSubmit: SubmitHandler<PeliculaCreacion> = async (data) => {
-        await new Promise(resolver => setTimeout(resolver, 1000));
-        console.log('Creando la película...');
-        console.log(data);
+        try {
+            const formData = ConvertirPeliculaCreacionAFormData(data);
+            await clienteAPI.postForm<Pelicula>('/peliculas', formData);
+            navigate('/');
+        } catch (error: any) {
+            const mensajeError = ExtraerErrores(error.response?.data?.errors);
+            toast.error(mensajeError, {
+                position: "bottom-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: false,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored"
+            });
+        }
     }
 
-    const generosSeleccionados: Genero[] = [];
-    const generosNoSeleccionados: Genero[] = [
-        { id: 1, nombre: 'Acción' }, { id: 2, nombre: 'Terror' }, { id: 3, nombre: 'Drama' }
-    ];
-
-    const cinesSeleccionados: Cine[] = [];
-    const cinesNoSeleccionados: Cine[] = [
-        { id: 1, nombre: 'Cinema Raly', latitud: 25.683940782799, longitud: -100.28553079999999 },
-        { id: 2, nombre: 'Cinepolis', latitud: 25.66806344098432, longitud: -100.31528212923988 },
-        { id: 3, nombre: 'Cine Citadel', latitud: 25.725976521693454, longitud: -100.21665865945626 }
-    ];
-
     return (
-        <div className="container mt-5">
-            <div className="card shadow-lg">
+        <>
+            <div className="container mt-5">
+                <div className="card shadow-lg">
 
-                <div className="card-header bg-primary text-white">
-                    <h4><i className="bi bi-plus-lg"></i> Crear Película</h4>
+                    <div className="card-header bg-primary text-white">
+                        <h4><i className="bi bi-plus-lg"></i> Crear Película</h4>
+                    </div>
+
+                    <div className="card-body">
+                        {cargando ? <Cargando /> : <FormularioPelicula
+                            onSubmit={onSubmit}
+                            generosSeleccionados={[]}
+                            generosNoSeleccionados={generosNoSeleccionados}
+                            cinesSeleccionados={[]}
+                            cinesNoSeleccionados={cinesNoSeleccionados}
+                            actoresSeleccionados={[]}
+                        />}
+                    </div>
+
                 </div>
-
-                <div className="card-body">
-                    <FormularioPelicula
-                        onSubmit={onSubmit}
-                        generosSeleccionados={generosSeleccionados}
-                        generosNoSeleccionados={generosNoSeleccionados}
-                        cinesSeleccionados={cinesSeleccionados}
-                        cinesNoSeleccionados={cinesNoSeleccionados}
-                        actoresSeleccionados={[]}
-                    />
-                </div>
-
             </div>
-        </div>
+
+            <ToastContainer />
+        </>
     )
 }
