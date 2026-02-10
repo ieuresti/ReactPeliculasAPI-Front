@@ -2,72 +2,84 @@ import type { SubmitHandler } from 'react-hook-form';
 import FormularioPelicula from './FormularioPelicula';
 import type PeliculaCreacion from '../modelos/PeliculaCreacion.model';
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 import Cargando from '../../../componentes/Cargando';
-import type Genero from '../../generos/modelos/Genero.model';
-import type Cine from '../../cines/modelos/Cine.model';
-import type ActorPelicula from '../modelos/ActorPelicula.model';
+import clienteAPI from '../../../api/clienteAxios';
+import ExtraerErrores from '../../../utils/ExtraerErrores';
+import { toast, ToastContainer } from 'react-toastify';
+import type PeliculaPutGet from '../modelos/PeliculaPutGet';
+import FormatearFecha from '../../../utils/FormatearFecha';
+import ConvertirPeliculaCreacionAFormData from '../utilidades/ConvertirPeliculaCreacionAFormData';
 
 export default function EditarPelicula() {
 
     const { id } = useParams();
 
     const [modelo, setModelo] = useState<PeliculaCreacion | undefined>(undefined);
+    const [peliculaPutGet, setPeliculaPutGet] = useState<PeliculaPutGet | undefined>(undefined);
+
+    const navigate = useNavigate();
 
     useEffect(() => {
-        const timerId = setTimeout(() => {
-            setModelo({ titulo: 'Pokémon: Jirachi, Wish Maker ' + id, fechaLanzamiento: '2003-07-01', trailer: '', poster: 'https://upload.wikimedia.org/wikipedia/en/c/cb/Pok%C3%A9mon_Jirachi_Wish_Maker_poster.jpg' });
-
-            return () => clearTimeout(timerId);
-        }, 1000);
+        clienteAPI.get(`/peliculas/PutGet/${id}`).then(resp => {
+            setPeliculaPutGet(resp.data);
+            setModelo({
+                titulo: resp.data.pelicula.titulo,
+                fechaLanzamiento: FormatearFecha(resp.data.pelicula.fechaLanzamiento),
+                trailer: resp.data.pelicula.trailer,
+                poster: resp.data.pelicula.poster
+            });
+        });
     }, [id]);
 
     // Función que se ejecuta al enviar el formulario
     // SubmitHandler<PeliculaCreacion>: tipo para el handler de envío
     const onSubmit: SubmitHandler<PeliculaCreacion> = async (data) => {
-        await new Promise(resolver => setTimeout(resolver, 1000));
-        console.log('Editando la película...');
-        console.log(data);
+        try {
+            const formData = ConvertirPeliculaCreacionAFormData(data);
+            await clienteAPI.putForm(`/peliculas/${id}`, formData);
+            navigate('/');
+        } catch (error: any) {
+            const mensajeError = ExtraerErrores(error.response?.data?.errors);
+            toast.error(mensajeError, {
+                position: "bottom-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: false,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored"
+            });
+        }
     }
 
-    const generosSeleccionados: Genero[] = [
-        { id: 1, nombre: 'Acción' }, { id: 2, nombre: 'Terror' }
-    ];
-    const generosNoSeleccionados: Genero[] = [{ id: 3, nombre: 'Drama' }];
-
-    const cinesSeleccionados: Cine[] = [
-        { id: 2, nombre: 'Cinepolis', latitud: 25.66806344098432, longitud: -100.31528212923988 },
-        { id: 3, nombre: 'Cine Citadel', latitud: 25.725976521693454, longitud: -100.21665865945626 }
-    ];
-    const cinesNoSeleccionados: Cine[] = [
-        { id: 1, nombre: 'Cinema Raly', latitud: 25.683940782799, longitud: -100.28553079999999 }
-    ];
-    const actoresSeleccionados: ActorPelicula[] = [
-        { id: 1, nombre: 'Tom Holland', personaje: 'Spiderman', foto: 'https://upload.wikimedia.org/wikipedia/commons/2/25/Tom_Holland_MTV_2018_%2801%29.jpg' }
-    ];
-
     return (
-        <div className="container mt-5">
-            <div className="card shadow-lg">
+        <>
+            <div className="container mt-5">
+                <div className="card shadow-lg">
 
-                <div className="card-header bg-primary text-white">
-                    <h4><i className="bi bi-plus-lg"></i> Editar Película</h4>
+                    <div className="card-header bg-primary text-white">
+                        <h4><i className="bi bi-plus-lg"></i> Editar Película</h4>
+                    </div>
+
+                    <div className="card-body">
+                        {modelo && peliculaPutGet ?
+                            <FormularioPelicula
+                                onSubmit={onSubmit} modelo={modelo}
+                                generosSeleccionados={peliculaPutGet.generosSeleccionados}
+                                generosNoSeleccionados={peliculaPutGet.generosNoSeleccionados}
+                                cinesSeleccionados={peliculaPutGet.cinesSeleccionados}
+                                cinesNoSeleccionados={peliculaPutGet.cinesNoSeleccionados}
+                                actoresSeleccionados={peliculaPutGet.actores} />
+                            : <Cargando />
+                        }
+                    </div>
+
                 </div>
-
-                <div className="card-body">
-                    {modelo ?
-                        <FormularioPelicula
-                            onSubmit={onSubmit} modelo={modelo}
-                            generosSeleccionados={generosSeleccionados}
-                            generosNoSeleccionados={generosNoSeleccionados}
-                            cinesSeleccionados={cinesSeleccionados}
-                            cinesNoSeleccionados={cinesNoSeleccionados}
-                            actoresSeleccionados={actoresSeleccionados} />
-                        : <Cargando />
-                    }
-                </div>
-
             </div>
-        </div>
+
+            <ToastContainer />
+        </>
     )
 }

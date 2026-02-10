@@ -33,8 +33,8 @@ export default function CrearPelicula() {
     const onSubmit: SubmitHandler<PeliculaCreacion> = async (data) => {
         try {
             const formData = ConvertirPeliculaCreacionAFormData(data);
-            await clienteAPI.postForm<Pelicula>('/peliculas', formData);
-            navigate('/');
+            const respuesta = await clienteAPI.postForm<Pelicula>('/peliculas', formData);
+            navigate(`/peliculas/${respuesta.data.id}`);
         } catch (error: any) {
             const mensajeError = ExtraerErrores(error.response?.data?.errors);
             toast.error(mensajeError, {

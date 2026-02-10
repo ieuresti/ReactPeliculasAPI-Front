@@ -18,13 +18,13 @@ export default function Mapa(props: MapaProps) {
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                 />
 
-                <ClickMapa setPunto={coordenada => {
+                {props.editable ? <ClickMapa setPunto={coordenada => {
                     setCoordenadas([coordenada]);
 
                     if (props.lugarSeleccionado) {
                         props.lugarSeleccionado(coordenada);
                     }
-                }} />
+                }} /> : undefined}
 
                 {coordenadas?.map(coordenada =>
                     <Marker key={coordenada.lat + coordenada.lng} position={[coordenada.lat, coordenada.lng]}>
@@ -39,6 +39,7 @@ export default function Mapa(props: MapaProps) {
 interface MapaProps {
     lugarSeleccionado?: (coordenada: Coordenada) => void;
     coordenadas?: Coordenada[];
+    editable?: boolean;
 }
 
 function ClickMapa(props: ClickMapaProps) {
