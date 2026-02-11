@@ -1,8 +1,17 @@
 import { useForm, type SubmitHandler } from 'react-hook-form';
 import Boton from '../../../componentes/Boton';
 import type Genero from '../../generos/modelos/Genero.model';
+import { useEffect, useState } from 'react';
+import clienteAPI from '../../../api/clienteAxios';
+import type Pelicula from '../modelos/pelicula.model';
+import ListadoPeliculas from './ListadoPeliculas';
+import { useSearchParams } from 'react-router';
 
 export default function FiltrarPeliculas() {
+
+    const [generos, setGeneros] = useState<Genero[]>([]);
+    const [peliculas, setPeliculas] = useState<Pelicula[]>();
+    const [searchParams, setSearchParams] = useSearchParams(); // Hook useSearchParams de react-router para manejar los parámetros de búsqueda en la URL
 
     const valorInicial: FormType = {
         titulo: '',
@@ -16,20 +25,85 @@ export default function FiltrarPeliculas() {
         register, // registra campos del formulario
         handleSubmit, // maneja el envío del formulario
         reset, // resetear el formulario
+        setValue, // establecer valores de los campos del formulario
         formState: { isSubmitting } // contiene estado del formulario (errores, validación, envío)
     } = useForm<FormType>({
         defaultValues: valorInicial // establecer los valores iniciales de los campos del formulario
     });
 
-    const onSubmit: SubmitHandler<FormType> = async (data) => {
-        console.log('filtrando...');
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        console.log(data);
+    useEffect(() => {
+        clienteAPI.get<Genero[]>('/generos/todos').then(resp => {
+            setGeneros(resp.data);
+        });
+    }, []);
+
+    useEffect(() => {
+        if (generos.length === 0) {
+            return; // Si no se han cargado los géneros, no realizar la búsqueda de películas
+        }
+
+        if (searchParams.has('titulo')) {
+            valorInicial.titulo = searchParams.get('titulo')!;
+            setValue('titulo', valorInicial.titulo);
+        }
+
+        if (searchParams.has('titulo')) {
+            valorInicial.titulo = searchParams.get('titulo')!;
+            setValue('titulo', valorInicial.titulo);
+        }
+
+        if (searchParams.has('generoId')) {
+            valorInicial.generoId = parseInt(searchParams.get('generoId')!, 10);
+            setValue('generoId', valorInicial.generoId);
+        }
+
+        if (searchParams.has('proximosEstrenos')) {
+            valorInicial.proximosEstrenos = searchParams.get('proximosEstrenos') === 'true';
+            setValue('proximosEstrenos', valorInicial.proximosEstrenos);
+        }
+
+        if (searchParams.has('enCines')) {
+            valorInicial.enCines = searchParams.get('enCines') === 'true';
+            setValue('enCines', valorInicial.enCines);
+        }
+
+        buscarPeliculas(valorInicial);
+    }, [generos]); // Segundo useEffect se ejecuta cada vez que cambian los géneros, lo que permite cargar las películas filtradas una vez que se han obtenido los géneros disponibles.
+
+    async function buscarPeliculas(valores: FormType) { // FormType es la interfaz que define la estructura de los datos del formulario
+        modificarURL(valores); // Modificar la URL con los parámetros de búsqueda antes de realizar la solicitud al backend
+
+        try {
+            await clienteAPI.get<Pelicula[]>('/peliculas/filtrar', { params: valores }).then(resp => {
+                setPeliculas(resp.data);
+            })
+        } catch (error) {
+            console.error('Error al filtrar películas:', error);
+        }
     }
 
-    const generos: Genero[] = [
-        { id: 1, nombre: 'Terror' }, { id: 2, nombre: 'Acción' }, { id: 3, nombre: 'Comedia' }
-    ];
+    function modificarURL(valores: FormType) {
+        const params = new URLSearchParams(); // Crear un objeto URLSearchParams para construir la cadena de consulta
+
+        if (valores.titulo) {
+            params.set('titulo', valores.titulo);
+        }
+        if (valores.generoId) {
+            params.set('generoId', valores.generoId.toString());
+        }
+        if (valores.proximosEstrenos) {
+            params.set('proximosEstrenos', valores.proximosEstrenos.toString());
+        }
+        if (valores.enCines) {
+            params.set('enCines', valores.enCines.toString());
+        }
+
+        setSearchParams(params); // Actualizar los parámetros de búsqueda en la URL
+    }
+
+    const onSubmit: SubmitHandler<FormType> = async (data) => {
+        await buscarPeliculas(data);
+    }
 
     return (
         <>
@@ -69,9 +143,19 @@ export default function FiltrarPeliculas() {
 
                             <div className="col-12 col-lg-2 d-flex gap-2">
                                 <Boton disabled={isSubmitting} type="submit">{isSubmitting ? 'Filtrando...' : 'Filtrar'}</Boton>
-                                <Boton onClick={() => reset()} btnClassName="btn btn-danger">Limpiar</Boton>
+                                <Boton onClick={() => {
+                                    reset();
+                                    buscarPeliculas(valorInicial); // Realizar la búsqueda con los valores iniciales para mostrar todas las películas
+                                }}
+                                    btnClassName="btn btn-danger">
+                                    Limpiar
+                                </Boton>
                             </div>
                         </form>
+
+                        <div className="mt-4">
+                            <ListadoPeliculas peliculas={peliculas} />
+                        </div>
                     </div>
 
                 </div>
