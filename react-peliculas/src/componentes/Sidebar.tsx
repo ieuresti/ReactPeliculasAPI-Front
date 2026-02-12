@@ -1,4 +1,5 @@
 import { NavLink } from 'react-router';
+import Autorizado from '../features/seguridad/componentes/Autorizado';
 
 export default function Sidebar() {
     return (
@@ -34,35 +35,41 @@ export default function Sidebar() {
                         </NavLink>
                     </li>
                     <li>
-                        <NavLink to="/generos">
-                            <i className="bi bi-tag"></i>
-                            <span>Géneros</span>
-                        </NavLink>
-                    </li>
-                    <li>
-                        <NavLink to="/actores">
-                            <i className="bi bi-star"></i>
-                            <span>Actores</span>
-                        </NavLink>
-                    </li>
-                    <li>
-                        <NavLink to="/cines">
-                            <i className="bi bi-building"></i>
-                            <span>Cines</span>
-                        </NavLink>
-                    </li>
-                    <li>
                         <NavLink to="/peliculas/filtrar">
                             <i className="bi bi-camera-reels"></i>
                             <span>Filtrar Películas</span>
                         </NavLink>
                     </li>
-                    <li>
-                        <NavLink to="/peliculas/crear">
-                            <i className="bi bi-film"></i>
-                            <span>Crear Película</span>
-                        </NavLink>
-                    </li>
+
+                    <Autorizado
+                        claims={['esAdmin']}
+                        autorizado={<>
+                            <li>
+                                <NavLink to="/generos">
+                                    <i className="bi bi-tag"></i>
+                                    <span>Géneros</span>
+                                </NavLink>
+                            </li>
+                            <li>
+                                <NavLink to="/actores">
+                                    <i className="bi bi-star"></i>
+                                    <span>Actores</span>
+                                </NavLink>
+                            </li>
+                            <li>
+                                <NavLink to="/cines">
+                                    <i className="bi bi-building"></i>
+                                    <span>Cines</span>
+                                </NavLink>
+                            </li>
+                            <li>
+                                <NavLink to="/peliculas/crear">
+                                    <i className="bi bi-film"></i>
+                                    <span>Crear Película</span>
+                                </NavLink>
+                            </li>
+                        </>}
+                    />
                 </ul>
             </nav>
 
