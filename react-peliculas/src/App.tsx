@@ -4,12 +4,17 @@ import Sidebar from './componentes/Sidebar';
 import AppRoutes from './AppRoutes';
 import Menu from './componentes/Menu';
 import AutenticacionContext from './features/seguridad/utilidades/AutenticacionContext';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import type Claim from './features/seguridad/modelos/Claim';
+import { obtenerClaims } from './features/seguridad/utilidades/ManejadorJWT';
 
 export default function App() {
 
-	const [claims, setClaims] = useState<Claim[]>([{ nombre: 'esAdmin', valor: 'true' }]); // Estado para almacenar los claims del usuario
+	const [claims, setClaims] = useState<Claim[]>([]); // Estado para almacenar los claims del usuario
+
+	useEffect(() => {
+		setClaims(obtenerClaims()); // Obtener los claims del usuario al cargar la aplicación y almacenarlos en el estado
+	}, []);
 
 	// Función para actualizar los claims en el contexto de autenticación
 	function actualizar(claims: Claim[]) {
