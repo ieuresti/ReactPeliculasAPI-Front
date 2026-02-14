@@ -1,7 +1,26 @@
 import { NavLink } from 'react-router';
 import Autorizado from '../features/seguridad/componentes/Autorizado';
+import { useContext, useEffect, useState } from 'react';
+import AutenticacionContext from '../features/seguridad/utilidades/AutenticacionContext';
+import { logout } from '../features/seguridad/utilidades/ManejadorJWT';
 
 export default function Sidebar() {
+
+    // Obtener los valores del contexto
+    const { claims, actualizar } = useContext(AutenticacionContext);
+    const [nombre, setNombre] = useState<string>('');
+
+    useEffect(() => {
+        const emailClaim = claims.filter(x => x.nombre === 'email')[0]?.valor;
+        if (emailClaim) {
+            setNombre(emailClaim.split('@')[0]);
+        }
+    }, [claims])
+
+    function obtenerNombreUsuario(): string {
+        return claims.filter(x => x.nombre === 'email')[0]?.valor;
+    }
+
     return (
         <div className="barra-lateral">
 
@@ -20,10 +39,27 @@ export default function Sidebar() {
                     <span>React Películas</span>
                 </div>
 
-                <button className="boton">
-                    <i className="bi bi-plus"></i>
-                    <span>Login</span>
-                </button>
+                <Autorizado
+                    autorizado={<>
+                        <button className="boton" onClick={() => {
+                            logout();
+                            actualizar([]);
+                        }}>
+                            <i className="bi bi-box-arrow-right"></i>
+                            <span>Logout</span>
+                        </button>
+                    </>}
+                    noAutorizado={<>
+                        <NavLink to="/login" className="btn btn-primary">
+                            <i className="bi bi-box-arrow-in-right"></i>
+                            <span className="ms-2">Login</span>
+                        </NavLink>
+                        <NavLink to="/registro" className="btn btn-secondary ms-2">
+                            <i className="bi bi-person-plus"></i>
+                            <span className="ms-2">Registro</span>
+                        </NavLink>
+                    </>}
+                />
             </div>
 
             <nav className="navegacion">
@@ -94,17 +130,21 @@ export default function Sidebar() {
                     </div>
                 </div>
 
-                <div className="usuario">
-                    <i className="bi bi-person-circle"></i>
+                <Autorizado
+                    autorizado={<>
+                        <div className="usuario">
+                            <i className="bi bi-person-circle"></i>
 
-                    <div className="info-usuario">
-                        <div className="nombre-email">
-                            <span className="nombre">John Doe</span>
-                            <span className="email">johndoe@gmail.com</span>
+                            <div className="info-usuario">
+                                <div className="nombre-email">
+                                    <span className="nombre">{nombre}</span>
+                                    <span className="email">{obtenerNombreUsuario()}</span>
+                                </div>
+                                <i className="bi bi-three-dots-vertical"></i>
+                            </div>
                         </div>
-                        <i className="bi bi-three-dots-vertical"></i>
-                    </div>
-                </div>
+                    </>}
+                />
             </div>
 
         </div>

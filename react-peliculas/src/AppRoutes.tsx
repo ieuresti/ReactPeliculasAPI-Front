@@ -15,12 +15,18 @@ import RutaNoEncontrada from './componentes/RutaNoEncontrada';
 import FiltrarPeliculas from './features/peliculas/componentes/FiltrarPeliculas';
 import DetallePelicula from './features/peliculas/componentes/DetallePelicula';
 import RutaProtegida from './features/seguridad/componentes/RutaProtegida';
+import Registro from './features/seguridad/componentes/Registro';
+import Login from './features/seguridad/componentes/Login';
 
 export default function AppRoutes() {
     return (
         <Routes>
             {/* Ruta pública para la página de inicio, accesible para todos los usuarios sin necesidad de claims específicos */}
             <Route path='/' element={<LandingPage />} />
+
+            {/* Rutas públicas para el registro y login, accesibles para todos los usuarios sin necesidad de claims específicos */}
+            <Route path='/registro' element={<Registro />} />
+            <Route path='/login' element={<Login />} />
 
             {/* Rutas protegidas para administradores, utilizando el componente RutaProtegida que verifica los claims del usuario antes de renderizar las rutas hijas */}
             <Route element={<RutaProtegida claims={['esAdmin']} />} >
