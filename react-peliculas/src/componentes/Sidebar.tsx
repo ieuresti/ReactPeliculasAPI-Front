@@ -104,6 +104,12 @@ export default function Sidebar() {
                                     <span>Crear Película</span>
                                 </NavLink>
                             </li>
+                            <li>
+                                <NavLink to="/usuarios">
+                                    <i className="bi bi-people"></i>
+                                    <span>Usuarios</span>
+                                </NavLink>
+                            </li>
                         </>}
                     />
                 </ul>

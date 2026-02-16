@@ -17,6 +17,7 @@ import DetallePelicula from './features/peliculas/componentes/DetallePelicula';
 import RutaProtegida from './features/seguridad/componentes/RutaProtegida';
 import Registro from './features/seguridad/componentes/Registro';
 import Login from './features/seguridad/componentes/Login';
+import IndiceUsuarios from './features/seguridad/componentes/IndiceUsuarios';
 
 export default function AppRoutes() {
     return (
@@ -44,6 +45,8 @@ export default function AppRoutes() {
 
                 <Route path='/peliculas/crear' element={<CrearPelicula />} />
                 <Route path='/peliculas/editar/:id' element={<EditarPelicula />} />
+
+                <Route path='/usuarios' element={<IndiceUsuarios />} />
             </Route>
 
             {/* Rutas públicas para todos los usuarios, sin necesidad de claims específicos */}

@@ -43,9 +43,10 @@ export default function IndiceEntidades<T>(props: IndiceEntidadesProps<T>) {
     return (
         <>
             <h3>{props.titulo}</h3>
-            <div className="mb-3">
-                <Boton onClick={() => navigate(props.urlCrear)}>Crear {props.titulo}</Boton>
-            </div>
+            {props.urlCrear ?
+                <div className="mb-3">
+                    <Boton onClick={() => navigate(props.urlCrear!)}>Crear {props.titulo}</Boton>
+                </div> : undefined}
 
             {props.cargando ? <Cargando /> : <div className="mb-4">
                 <div className="mb-2">
@@ -70,10 +71,10 @@ export default function IndiceEntidades<T>(props: IndiceEntidadesProps<T>) {
 }
 
 interface IndiceEntidadesProps<T> {
-    url: string;
-    urlCrear: string;
+    url?: string;
+    urlCrear?: string;
     titulo: string;
-    nombreEntidad: string;
+    nombreEntidad?: string;
     pagina: number;
     recordsPorPagina: number;
     cantidadTotalRegistros: number;
